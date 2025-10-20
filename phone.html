@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车主联系方式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .phone-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 15px 0;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 15px 0;
+            background-color: #4a90e2;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .phone-number:hover {
+            background-color: #357ae8;
+            transform: scale(1.05);
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .tip {
+            margin-top: 15px;
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .privacy-notice {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>车主联系方式</h1>
+        <p>如需挪车，请拨打以下电话</p>
+        <a id="phoneLink" class="phone-number">加载中...</a>
+        <p class="instructions">点击上方号码可直接拨打电话</p>
+        <p class="tip">感谢您的理解与配合</p>
+        <div class="privacy-notice">
+            <p>此为虚拟号码，保护车主隐私</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // 解密手机号
+        function decryptPhone(encryptedPhone) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedPhone, 'move-car-secret-key');
+                return bytes.toString(CryptoJS.enc.Utf8);
+            } catch (e) {
+                console.error('解密失败:', e);
+                return null;
+            }
+        }
+        
+        // 获取URL参数
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split('&');
+            
+            for (let i = 0; i < pairs.length; i++) {
+                const pair = pairs[i].split('=');
+                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+            }
+            
+            return params;
+        }
+        
+        // 页面加载时处理
+        window.onload = function() {
+            const params = getUrlParams();
+            const encryptedPhone = params.p;
+            const virtualPhone = params.v;
+            
+            if (encryptedPhone && virtualPhone) {
+                // 显示虚拟号码
+                document.getElementById('phoneLink').textContent = virtualPhone;
+                
+                // 解密真实号码并设置拨号链接
+                const realPhone = decryptPhone(encryptedPhone);
+                if (realPhone) {
+                    document.getElementById('phoneLink').href = `tel:${realPhone}`;
+                } else {
+                    document.getElementById('phoneLink').textContent = '号码无效';
+                    document.getElementById('phoneLink').style.backgroundColor = '#dc3545';
+                    document.getElementById('phoneLink').removeAttribute('href');
+                }
+            } else {
+                document.getElementById('phoneLink').textContent = '参数错误';
+                document.getElementById('phoneLink').style.backgroundColor = '#dc3545';
+                document.getElementById('phoneLink').removeAttribute('href');
+            }
+        };
+    </script>
+</body>
+</html>
