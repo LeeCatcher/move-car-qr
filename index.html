@@ -8,40 +8,43 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🚗 挪车服务</h1>
-            <p>扫描二维码联系车主</p>
-        </header>
-        
-        <div class="qr-section" id="qrSection">
-            <div class="qr-container">
-                <canvas id="qrCode" width="200" height="200"></canvas>
-            </div>
-            <div class="info">
-                <p><strong>虚拟号码：</strong><span id="virtualNumber">加载中...</span></p>
-                <p><strong>有效期至：</strong><span class="expiry-date">计算中...</span></p>
-                <button onclick="refreshNumber()">刷新号码</button>
-            </div>
+        <div class="header">
+            <div class="car-icon">🚗</div>
+            <h1>临时驻车，电联即走！</h1>
+            <p>扫码联系车主，安全便捷</p>
         </div>
         
-        <div class="contact-section" id="contactSection">
-            <h2>联系车主</h2>
-            <div class="contact-info">
-                <p>虚拟号码：<span id="displayNumber">加载中...</span></p>
-                <div class="actions">
-                    <button onclick="callNumber()">📞 拨打虚拟号码</button>
-                    <button onclick="copyNumber()">📋 复制号码</button>
-                    <button onclick="showQR()">返回主页</button>
+        <div class="content">
+            <div class="contact-card">
+                <div class="card-header">
+                    <h2>挪车电话如下：</h2>
+                </div>
+                
+                <div class="phone-number" id="phoneDisplay">
+                    正在加载...
+                </div>
+                
+                <div class="action-section">
+                    <button class="call-button" onclick="callNumber()">
+                        <span class="button-icon">📞</span>
+                        拨打电话
+                    </button>
+                </div>
+                
+                <div class="footer-note">
+                    <p>扫码后可直接拨打车主电话</p>
+                    <p>服务有效期15年</p>
                 </div>
             </div>
+            
+            <div class="decoration">
+                <div class="decoration-item">🚙</div>
+                <div class="decoration-item">🚘</div>
+                <div class="decoration-item">🚗</div>
+            </div>
         </div>
-        
-        <footer>
-            <p>本服务免费提供，有效期15年</p>
-        </footer>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
     <script src="script.js"></script>
 </body>
 </html>
