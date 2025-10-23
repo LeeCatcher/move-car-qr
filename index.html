@@ -3,261 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>挪车二维码生成器</title>
+    <title>挪车服务</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        }
-        
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 500px;
-            width: 100%;
+            font-family: Arial, sans-serif;
             text-align: center;
+            padding: 50px;
         }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-        
-        .description {
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: bold;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-        
-        input:focus {
-            border-color: #4a90e2;
-            outline: none;
-        }
-        
-        button {
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-top: 10px;
-        }
-        
-        button:hover {
-            background-color: #357ae8;
-        }
-        
-        .qr-container {
+        .number {
+            font-size: 2em;
+            color: #007bff;
             margin: 20px 0;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            display: none;
         }
-        
-        .qr-image {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .info-section {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #e7f3ff;
-            border-radius: 10px;
-            text-align: left;
-        }
-        
-        .info-section h3 {
-            margin-bottom: 10px;
-            color: #004085;
-        }
-        
-        .footer {
-            margin-top: 20px;
-            color: #aaa;
-            font-size: 12px;
-        }
-        
-        .download-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background-color 0.3s;
-            display: inline-block;
-            text-decoration: none;
-        }
-        
-        .download-btn:hover {
-            background-color: #218838;
+        .expired {
+            color: red;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>挪车二维码生成器</h1>
-        <p class="description">输入您的真实手机号，系统将生成一个虚拟号码，保护您的隐私</p>
-        
-        <div class="form-group">
-            <label for="realPhone">真实手机号</label>
-            <input type="text" id="realPhone" placeholder="请输入您的真实手机号码" maxlength="11">
-        </div>
-        
-        <div class="form-group">
-            <label for="virtualPhone">虚拟号码 (可选)</label>
-            <input type="text" id="virtualPhone" placeholder="系统将自动生成虚拟号码" maxlength="11">
-        </div>
-        
-        <button id="generateBtn">生成二维码</button>
-        
-        <div class="qr-container" id="qrContainer">
-            <div id="qrcode"></div>
-            <br>
-            <a href="#" id="downloadBtn" class="download-btn">下载二维码</a>
-            
-            <div class="info-section">
-                <h3>使用说明</h3>
-                <p>1. 扫描此二维码将显示虚拟号码: <span id="displayVirtualPhone"></span></p>
-                <p>2. 点击虚拟号码将自动拨打您的真实手机</p>
-                <p>3. 此二维码有效期为20年</p>
-                <p>4. 您的真实号码已安全加密存储</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>本服务部署于GitHub Pages，完全免费使用</p>
-        </div>
+    <h1>挪车服务</h1>
+    <div id="content">
+        <p>扫描二维码获取车主虚拟号码</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        // 生成随机虚拟号码
-        function generateVirtualPhone() {
-            const prefixes = ['170', '171', '172', '173', '174', '175', '176', '177', '178', '179'];
-            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-            const suffix = Math.floor(10000000 + Math.random() * 90000000).toString().substring(0, 8);
-            return prefix + suffix;
-        }
-        
-        // 加密手机号
-        function encryptPhone(phone) {
-            // 使用简单加密，实际应用中可以使用更复杂的加密算法
-            return CryptoJS.AES.encrypt(phone, 'move-car-secret-key').toString();
-        }
-        
-        // 生成二维码
-        function generateQRCode(realPhone, virtualPhone) {
-            // 加密真实手机号
-            const encryptedPhone = encryptPhone(realPhone);
-            
-            // 创建虚拟号码页面URL
-            const pageUrl = `${window.location.origin}${window.location.pathname.replace('index.html', '')}phone.html?p=${encodeURIComponent(encryptedPhone)}&v=${virtualPhone}`;
-            
-            // 清空之前的二维码
-            document.getElementById('qrcode').innerHTML = '';
-            
-            // 生成新的二维码
-            QRCode.toCanvas(document.getElementById('qrcode'), pageUrl, {
-                width: 200,
-                margin: 1,
-                color: {
-                    dark: '#333333',
-                    light: '#FFFFFF'
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
                 }
-            }, function(error) {
-                if (error) console.error(error);
-                else {
-                    // 设置下载链接
-                    const canvas = document.querySelector('#qrcode canvas');
-                    const downloadBtn = document.getElementById('downloadBtn');
-                    downloadBtn.href = canvas.toDataURL('image/png');
-                    downloadBtn.download = `move-car-${virtualPhone}.png`;
-                    
-                    // 显示二维码容器
-                    document.getElementById('qrContainer').style.display = 'block';
-                    document.getElementById('displayVirtualPhone').textContent = virtualPhone;
-                }
-            });
+            }
+            return null;
         }
-        
-        // 生成按钮点击事件
-        document.getElementById('generateBtn').addEventListener('click', function() {
-            const realPhone = document.getElementById('realPhone').value.trim();
-            let virtualPhone = document.getElementById('virtualPhone').value.trim();
-            
-            // 简单的手机号验证
-            if (!realPhone) {
-                alert('请输入真实手机号码');
-                return;
+
+        var virtualNumber = getQueryVariable('vn');
+        var expireDateStr = getQueryVariable('expire');
+
+        if (virtualNumber && expireDateStr) {
+            var expireDate = new Date(expireDateStr);
+            var currentDate = new Date();
+
+            if (currentDate <= expireDate) {
+                // 在有效期内
+                document.getElementById('content').innerHTML = 
+                    '<p>请拨打以下虚拟号码联系车主：</p>' +
+                    '<div class="number">' + virtualNumber + '</div>' +
+                    '<p>（有效期至：' + expireDate.toLocaleDateString() + '）</p>';
+            } else {
+                document.getElementById('content').innerHTML = 
+                    '<p class="expired">抱歉，该二维码已过期。</p>';
             }
-            
-            if (!/^1[3-9]\d{9}$/.test(realPhone)) {
-                alert('请输入有效的手机号码');
-                return;
-            }
-            
-            // 如果没有输入虚拟号码，则自动生成
-            if (!virtualPhone) {
-                virtualPhone = generateVirtualPhone();
-                document.getElementById('virtualPhone').value = virtualPhone;
-            } else if (!/^1[3-9]\d{9}$/.test(virtualPhone)) {
-                alert('请输入有效的虚拟手机号码');
-                return;
-            }
-            
-            // 生成二维码
-            generateQRCode(realPhone, virtualPhone);
-        });
-        
-        // 页面加载时自动生成虚拟号码
-        window.onload = function() {
-            document.getElementById('virtualPhone').value = generateVirtualPhone();
-        };
+        } else {
+            document.getElementById('content').innerHTML = 
+                '<p>参数错误，无法获取虚拟号码。</p>';
+        }
     </script>
 </body>
 </html>
