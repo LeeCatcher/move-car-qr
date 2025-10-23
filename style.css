@@ -101,6 +101,10 @@ body {
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     letter-spacing: 2px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-section {
@@ -178,6 +182,16 @@ body {
     50% { transform: translateY(-10px); }
 }
 
+.error-message {
+    color: #dc3545;
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+    display: none;
+}
+
 /* 响应式设计 */
 @media (max-width: 480px) {
     .container {
@@ -198,6 +212,7 @@ body {
     
     .phone-number {
         font-size: 1.8em;
+        min-height: 70px;
     }
     
     .call-button {
